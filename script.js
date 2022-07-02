@@ -1,7 +1,7 @@
-const ajaxData = ({ url, data, method }) => {
+const ajaxData = ({ url, method, body }) => {
     return fetch(url, {
         method: method,
-        body: JSON.stringify(data),
+        body: body,
         headers: {
             'Content-type': 'application/json; charset=UTF-8',
         },
@@ -9,8 +9,29 @@ const ajaxData = ({ url, data, method }) => {
         .then((response) => response.json())
 }
 
-const xmlRequestData = () => {
-    
+const xmlHttpSendData = (data) => {
+    let xhr = new XMLHttpRequest();
+
+    let json = JSON.stringify(data);
+
+    xhr.upload.onprogress = function (event) {
+        console.log(`Отправлено ${event.loaded} из ${event.total}`);
+    };
+
+    xhr.upload.onload = function () {
+        console.log(`Данные успешно отправлены.`);
+    };
+
+    xhr.upload.onerror = function () {
+        console.log(`Произошла ошибка во время отправки: ${xhr.status}`);
+    };
+
+    xhr.open('POST', 'https://jsonplaceholder.typicode.com/posts');
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+    xhr.send(json);
+
+    xhr.onload = () => console.log(xhr.response);
 }
 
 const getData = () => {
@@ -20,16 +41,9 @@ const getData = () => {
     })
 }
 
-const sendData = (data) => {
-    return ajaxData({
-        method: 'POST',
-        url: 'https://jsonplaceholder.typicode.com/posts',
-        data: data
-    })
-        .then(data => console.log(data))
-        .catch((error) => console.log(error))
-}
-
 getData()
-    .then(data => sendData(data))
+    .then(data => {
+        console.log(data)
+        xmlHttpSendData(data)
+    })
     .catch((error) => console.log(error))
