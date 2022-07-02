@@ -1,7 +1,7 @@
-const ajaxData = ({ url, data, method }) => {
+const ajaxData = ({ url, method, body }) => {
     return fetch(url, {
         method: method,
-        body: JSON.stringify(data),
+        body: body,
         headers: {
             'Content-type': 'application/json; charset=UTF-8',
         },
@@ -20,12 +20,15 @@ const sendData = (data) => {
     return ajaxData({
         method: 'POST',
         url: 'https://jsonplaceholder.typicode.com/posts',
-        data: data
+        body: JSON.stringify(data)
     })
         .then(data => console.log(data))
         .catch((error) => console.log(error))
 }
 
 getData()
-    .then(data => sendData(data))
+    .then(data => {
+        console.log(data)
+        sendData(data)
+    })
     .catch((error) => console.log(error))
