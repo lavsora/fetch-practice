@@ -9,6 +9,10 @@ const ajaxData = ({ url, data, method }) => {
         .then((response) => response.json())
 }
 
+const xmlRequestData = () => {
+    
+}
+
 const getData = () => {
     return ajaxData({
         method: 'GET',
